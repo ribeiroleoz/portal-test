@@ -9,12 +9,13 @@ import { MatInputModule } from '@angular/material/input';
 import { ApiService } from '../../../services/api';
 import { IProduct, IProductForm } from '../product';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-update-product-form',
   standalone: true,
   providers: [ApiService],
-  imports: [MatIconModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatCardModule],
+  imports: [HttpClientModule, MatIconModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatCardModule],
   templateUrl: './update-product.component.html',
 })
 export class UpdateProductFormComponent implements OnInit {
@@ -74,11 +75,14 @@ export class UpdateProductFormComponent implements OnInit {
     formData.append('description', payload.description);
     formData.append('stock', payload.stock.toString());
     formData.append('price', payload.price.toString());
-    formData.append('image', this.selectedFile!, this.selectedFile!.name)
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile, this.selectedFile.name)
+    }
 
     this.api.put('products', formData).subscribe({
       next: (data: any) => {
-        console.log(data);
+        this.navigateBack();
       },
       error: (err) => console.log('Erro: ', err)
     });

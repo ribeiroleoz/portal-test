@@ -9,12 +9,13 @@ import { MatInputModule } from '@angular/material/input';
 import { ApiService } from '../../../services/api';
 import { IProductForm } from '../product';
 import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
   providers: [ApiService],
-  imports: [MatIconModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatCardModule],
+  imports: [HttpClientModule, MatIconModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatCardModule],
   templateUrl: './product-form.component.html',
 })
 export class ProductFormComponent {
@@ -48,11 +49,13 @@ export class ProductFormComponent {
     formData.append('description', payload.description);
     formData.append('stock', payload.stock.toString());
     formData.append('price', payload.price.toString());
-    formData.append('image', this.selectedFile!, this.selectedFile!.name)
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile, this.selectedFile.name)
+    }
 
     this.api.put('products', formData).subscribe({
       next: (data: any) => {
-        console.log(data);
+        this.navigateBack();
       },
       error: (err) => console.log('Erro: ', err)
     });

@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 /* src/styles.css */
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Hentaigana:wght@200..900&family=Red+Hat+Display:ital,wght@0,300;1,300&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 html,
 body {
