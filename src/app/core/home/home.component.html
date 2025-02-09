@@ -1,0 +1,83 @@
+<div class="p-10 w-full">
+  <div class="flex">
+    <div class="w-1/5 flex flex-col">
+      <mat-form-field>
+        <mat-label>Busca</mat-label>
+        <input matInput type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()">
+        @if (searchTerm) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchTerm=''">
+          <mat-icon aria-hidden="false" aria-label="clear icon" fontIcon="close"></mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </div>
+    <div class="w-4/5">
+      <div class="row w-full">
+        <mat-paginator class="bg-transparent!" (page)="onPaginate($event)" [length]="pagination.total"
+          [pageSize]="pagination.size" [pageSizeOptions]="pagination.options" aria-label="Select page">
+        </mat-paginator>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <ng-container *ngIf="!loading; else skeleton">
+          <div class="p-20" *ngIf="products.length === 0; else showProduct">
+            <span>
+              Nenhum resultado encontrado
+            </span>
+          </div>
+          <ng-template #showProduct>
+            <mat-card *ngFor="let product of products" class="m-4 hover:!shadow-xl h-90">
+              <div class="flex justify-end m-1">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon aria-hidden="false" aria-label="options" fontIcon="more_vert"
+                    class="text-gray-500!"></mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button (click)="updateProduct(product.id)" mat-menu-item>Editar
+                    <mat-icon aria-hidden="false" aria-label="editIcon" fontIcon="edit" class="text-gray-500!">
+                    </mat-icon>
+                  </button>
+                  <button mat-menu-item>Excluir
+                    <mat-icon aria-hidden="false" aria-label="deleteIcon" fontIcon="delete" class="text-gray-500!">
+                    </mat-icon>
+                  </button>
+                </mat-menu>
+              </div>
+              <div (click)="navigateToProduct(product.id)"
+                class="px-5 flex flex-col gap-4 text-center hover:cursor-pointer">
+                <div>
+                  <span class="font-semibold text-lg">{{ product.name }}</span>
+                </div>
+                <div class="h-40 flex justify-center items-center">
+                  <img *ngIf="product?.image; else noImage" [src]="'data:image/png;base64,'+product.image"
+                    class="rounded-xs h-full">
+                  <ng-template #noImage>
+                    <mat-icon aria-hidden="false" aria-label="no image icon" fontIcon="no_photography"
+                      class="text-gray-500!"></mat-icon>
+                  </ng-template>
+                </div>
+                <div class="flex flex-col items-center truncate">
+                  <p class="text-sm text-gray-600">{{ product.description }}</p>
+                  <p class="font-semibold text-xl">R${{ product.price | number: '1.2-2' }}</p>
+                </div>
+              </div>
+            </mat-card>
+          </ng-template>
+        </ng-container>
+        <ng-template #skeleton>
+          <div *ngFor="let _ of [].constructor(10); let i = index">
+            <mat-card ngxSkeletonLoader="true" class="m-4 hover:!shadow-xl hover:cursor-pointer h-80">
+              <div class="p-5 flex flex-col gap-4 text-center justify-between w-full h-full">
+                <ngx-skeleton-loader [count]="1" appearance="line" width="50px"></ngx-skeleton-loader>
+                <ngx-skeleton-loader [count]="1" appearance="custom-content" height="50px" width="50px">
+                  <div>
+                    <ngx-skeleton-loader [count]="2" appearance="line"></ngx-skeleton-loader>
+                  </div>
+                </ngx-skeleton-loader>
+              </div>
+            </mat-card>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

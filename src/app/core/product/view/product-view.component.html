@@ -1,0 +1,47 @@
+<ng-container *ngIf="productData">
+    <div class="w-full h-full flex justify-center mt-10">
+        <div class="h-150 w-3/5 bg-white rounded!">
+            <div class="m-3">
+                <button mat-button (click)="navigateBack()">
+                    Voltar
+                    <mat-icon fontIcon="arrow_back_ios"></mat-icon>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 p-20">
+                <div class="max-h-100 flex justify-center items-center">
+                    <ng-container *ngIf=" productData?.image; else noImage">
+                        <img [src]="'data:image/png;base64,'+productData.image" alt="" class="h-full rounded!">
+                    </ng-container>
+                    <ng-template #noImage>
+                        <mat-icon aria-hidden="false" aria-label="noImage" fontIcon="no_photography"></mat-icon>
+                    </ng-template>
+                </div>
+                <div class="flex flex-col justify-between p-10 gap-5">
+                    <div class="flex flex-col gap-2">
+                        <span class="text-xl font-semibold">
+                            {{productData.name}}
+                        </span>
+                        <span>
+                            {{productData.description}}
+                        </span>
+                    </div>
+                    <div class="py-10">
+                        <span class="text-xl font-semibold">
+                            R$ {{productData.price}}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-5">
+                        <button mat-stroked-button>
+                            Comprar Agora
+                        </button>
+                        <button color="primary" mat-flat-button>
+                            Colocar no carrinho
+                            <mat-icon aria-hidden="false" aria-label="addToCart"
+                                fontIcon="add_shopping_cart"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

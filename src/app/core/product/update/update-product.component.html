@@ -1,0 +1,52 @@
+<div class="w-full h-full flex justify-center mt-20">
+    <mat-card class="w-3/4 px-10 py-10 h-fit">
+        <div class="m-3">
+            <button mat-button (click)="navigateBack()">
+                Voltar
+                <mat-icon fontIcon="arrow_back_ios"></mat-icon>
+            </button>
+        </div>
+        <form [formGroup]="productForm" class="flex flex-col gap-4" (ngSubmit)="onSubmit()">
+            <div class="grid grid-cols-12 gap-5">
+                <div class="col-span-6">
+                    <mat-card appearance="outlined" class="w-full h-full p-10">
+                        <mat-icon fontIcon="photo_camera"></mat-icon>
+                        <input type="file" placeholder="" formControlName="image" (change)="onFileSelected($event)"
+                            class="w-full h-full cursor-pointer">
+                    </mat-card>
+                </div>
+                <div class="col-span-6 flex flex-col gap-4">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Nome</mat-label>
+                        <input matInput placeholder="" formControlName="name">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Descrição</mat-label>
+                        <textarea matInput placeholder="" formControlName="description"></textarea>
+                    </mat-form-field>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Preço</mat-label>
+                            <span matTextPrefix>R$&nbsp;</span>
+                            <input type="number" matInput placeholder="" formControlName="price">
+                            <mat-icon matSuffix aria-hidden="false" aria-label="priceIcon" color="primary"
+                                fontIcon="payments">
+                            </mat-icon>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Estoque</mat-label>
+                            <input type="number" matInput placeholder="" formControlName="stock">
+                            <mat-icon matSuffix aria-hidden="false" aria-label="stockIcon" color="primary"
+                                fontIcon="package_2">
+                            </mat-icon>
+                        </mat-form-field>
+                    </div>
+                    <button mat-flat-button type="submit" color="primary"> Salvar </button>
+                </div>
+            </div>
+        </form>
+    </mat-card>
+</div>
