@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from "./core/navbar/navbar.component";
-import { HttpClientModule } from '@angular/common/http';
+import { } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, NavbarComponent, HttpClientModule,],
+  imports: [RouterModule, NavbarComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
