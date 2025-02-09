@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ApiService } from '../../../services/api';
 import { IProduct, IProductForm } from '../product';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-product-form',
@@ -21,7 +22,7 @@ export class UpdateProductFormComponent implements OnInit {
   id!: string;
   selectedFile: File | null = null;
 
-  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService) {
+  constructor(private toastr: ToastrService, private route: ActivatedRoute, private router: Router, private api: ApiService) {
     this.id = this.route.snapshot.paramMap.get('id')!;
   }
 
@@ -54,7 +55,7 @@ export class UpdateProductFormComponent implements OnInit {
           image: data.image || ''
         });
       },
-      error: (err) => console.log('Erro: ', err)
+      error: () => this.toastr.error('Houve algum erro ao buscar os dados do produto', 'Erro')
     });
   }
 
@@ -74,13 +75,16 @@ export class UpdateProductFormComponent implements OnInit {
     formData.append('description', payload.description);
     formData.append('stock', payload.stock.toString());
     formData.append('price', payload.price.toString());
-    formData.append('image', this.selectedFile!, this.selectedFile!.name)
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile, this.selectedFile.name)
+    }
 
     this.api.put('products', formData).subscribe({
       next: (data: any) => {
-        console.log(data);
+        this.navigateBack();
       },
-      error: (err) => console.log('Erro: ', err)
+      error: () => this.toastr.error('Houve algum erro ao atualizar o produto', 'Erro')
     });
   }
 }

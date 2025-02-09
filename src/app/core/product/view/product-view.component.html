@@ -1,40 +1,42 @@
-<ng-container *ngIf="productData">
+<ng-container *ngIf="productData; else skeletonLoading">
     <div class="w-full h-full flex justify-center mt-10">
-        <div class="h-150 w-3/5 bg-white rounded!">
+        <div class="max-w-3/5 h-[32rem] bg-white rounded-lg shadow-lg p-5">
             <div class="m-3">
-                <button mat-button (click)="navigateBack()">
-                    Voltar
+                <button mat-button (click)="navigateBack()" class="flex items-center space-x-2">
                     <mat-icon fontIcon="arrow_back_ios"></mat-icon>
+                    <span>Voltar</span>
                 </button>
             </div>
-            <div class="grid grid-cols-2 p-20">
-                <div class="max-h-100 flex justify-center items-center">
-                    <ng-container *ngIf=" productData?.image; else noImage">
-                        <img [src]="'data:image/png;base64,'+productData.image" alt="" class="h-full rounded!">
+            <div class="grid grid-cols-2 p-5 gap-10">
+                <div class="flex justify-center items-center">
+                    <ng-container *ngIf="productData?.image; else noImage">
+                        <img [src]="'data:image/png;base64,'+productData.image"
+                            class="h-80 w-full object-contain rounded-lg shadow-md">
                     </ng-container>
                     <ng-template #noImage>
-                        <mat-icon aria-hidden="false" aria-label="noImage" fontIcon="no_photography"></mat-icon>
+                        <mat-icon aria-hidden="false" aria-label="noImage" fontIcon="no_photography"
+                            class="text-gray-500 text-4xl"></mat-icon>
                     </ng-template>
                 </div>
-                <div class="flex flex-col justify-between p-10 gap-5">
+                <div class="flex flex-col justify-between p-5 gap-5">
                     <div class="flex flex-col gap-2">
-                        <span class="text-xl font-semibold">
+                        <span class="text-2xl font-semibold text-gray-800">
                             {{productData.name}}
                         </span>
-                        <span>
+                        <span class="text-gray-600">
                             {{productData.description}}
                         </span>
                     </div>
-                    <div class="py-10">
-                        <span class="text-xl font-semibold">
+                    <div class="py-5">
+                        <span class="text-xl font-semibold text-gray-900">
                             R$ {{productData.price}}
                         </span>
                     </div>
                     <div class="grid grid-cols-2 gap-5">
-                        <button mat-stroked-button>
+                        <button mat-stroked-button class="border border-gray-500 text-gray-700 hover:bg-gray-200">
                             Comprar Agora
                         </button>
-                        <button color="primary" mat-flat-button>
+                        <button color="primary" mat-flat-button class="bg-blue-600 text-white hover:bg-blue-700">
                             Colocar no carrinho
                             <mat-icon aria-hidden="false" aria-label="addToCart"
                                 fontIcon="add_shopping_cart"></mat-icon>
@@ -45,3 +47,33 @@
         </div>
     </div>
 </ng-container>
+
+<ng-template #skeletonLoading>
+    <div class="w-full h-full flex justify-center mt-10">
+        <div class="w-3/5 h-[32rem] bg-white rounded-lg shadow-lg p-5">
+            <div class="m-3">
+                <button mat-button class="flex items-center space-x-2">
+                    <ngx-skeleton-loader [count]="1" height="30px" width="120px"></ngx-skeleton-loader>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 p-5 gap-10">
+                <div class="flex justify-center items-center">
+                    <ngx-skeleton-loader [count]="1" height="320px" width="100%"></ngx-skeleton-loader>
+                </div>
+                <div class="flex flex-col justify-between p-5 gap-5">
+                    <div class="flex flex-col gap-2">
+                        <ngx-skeleton-loader [count]="1" height="40px" width="100%"></ngx-skeleton-loader>
+                        <ngx-skeleton-loader [count]="1" height="20px" width="80%"></ngx-skeleton-loader>
+                    </div>
+                    <div class="py-5">
+                        <ngx-skeleton-loader [count]="1" height="30px" width="100px"></ngx-skeleton-loader>
+                    </div>
+                    <div class="grid grid-cols-2 gap-5">
+                        <ngx-skeleton-loader [count]="1" height="45px" width="100%"></ngx-skeleton-loader>
+                        <ngx-skeleton-loader [count]="1" height="45px" width="100%"></ngx-skeleton-loader>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

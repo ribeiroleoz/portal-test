@@ -12,6 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { MatSelectModule } from '@angular/material/select';
 import { HttpParams } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
 import { Subject } from 'rxjs';
@@ -20,7 +21,7 @@ import { Subject } from 'rxjs';
   selector: 'app-home',
   standalone: true,
   providers: [ApiService],
-  imports: [MatMenuModule, NgxSkeletonLoaderModule, MatPaginatorModule, MatCardModule, CommonModule, MatInputModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatIconModule],
+  imports: [MatSelectModule, MatMenuModule, NgxSkeletonLoaderModule, MatPaginatorModule, MatCardModule, CommonModule, MatInputModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatIconModule],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
@@ -37,6 +38,12 @@ export class HomeComponent implements OnInit {
     total: 100,
     page: 0,
   }
+  statusOptions = [
+    { value: 'true', label: 'Ativo' },
+    { value: 'false', label: 'Desativado' },
+    { value: null, label: 'Todos' }
+  ];
+  status = 'true';
 
   ngOnInit(): void {
     this.searchSubject.pipe(
@@ -47,6 +54,9 @@ export class HomeComponent implements OnInit {
         let filters = new HttpParams();
         filters = filters.set('page', this.pagination.page);
         filters = filters.set('limit', this.pagination.size);
+        if (this.status !== null) {
+          filters = filters.set('status', this.status);
+        }
         if (this.searchTerm) {
           filters = filters.set('search', this.searchTerm);
         }
@@ -71,12 +81,19 @@ export class HomeComponent implements OnInit {
     this.searchSubject.next(this.searchTerm);
   }
 
+  onStatusChange(event: any) {
+    this.status = event.value;
+    this.searchSubject.next(this.searchTerm);
+  }
+
   updateProduct(id: string) {
     this.router.navigate([`/update-product/${id}`])
   }
 
-  disableProduct(id: string) {
-    this.api.delete('products', id);
+  async disableProduct(id: string) {
+    await this.api.delete('products', id).subscribe(() => {
+      this.searchSubject.next(this.searchTerm);
+    });
   }
 
   navigateToProduct(id: string) {

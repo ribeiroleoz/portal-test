@@ -10,11 +10,19 @@
         </button>
         }
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select [(value)]="status" (selectionChange)="onStatusChange($event)">
+          @for (status of statusOptions; track status) {
+          <mat-option [value]="status.value">{{status.label}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="w-4/5">
       <div class="row w-full">
-        <mat-paginator class="bg-transparent!" (page)="onPaginate($event)" [length]="pagination.total"
-          [pageSize]="pagination.size" [pageSizeOptions]="pagination.options" aria-label="Select page">
+        <mat-paginator (page)="onPaginate($event)" [length]="pagination.total" [pageSize]="pagination.size"
+          [pageSizeOptions]="pagination.options" aria-label="Select page">
         </mat-paginator>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
@@ -25,19 +33,19 @@
             </span>
           </div>
           <ng-template #showProduct>
-            <mat-card *ngFor="let product of products" class="m-4 hover:!shadow-xl h-90">
+            <mat-card *ngFor="let product of products" class="m-4 hover:shadow-xl h-80!">
               <div class="flex justify-end m-1">
                 <button mat-icon-button [matMenuTriggerFor]="menu">
                   <mat-icon aria-hidden="false" aria-label="options" fontIcon="more_vert"
-                    class="text-gray-500!"></mat-icon>
+                    class="text-gray-500"></mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
                   <button (click)="updateProduct(product.id)" mat-menu-item>Editar
-                    <mat-icon aria-hidden="false" aria-label="editIcon" fontIcon="edit" class="text-gray-500!">
+                    <mat-icon aria-hidden="false" aria-label="editIcon" fontIcon="edit" class="text-gray-500">
                     </mat-icon>
                   </button>
-                  <button mat-menu-item>Excluir
-                    <mat-icon aria-hidden="false" aria-label="deleteIcon" fontIcon="delete" class="text-gray-500!">
+                  <button (click)="disableProduct(product.id)" mat-menu-item>Desabilitar
+                    <mat-icon aria-hidden="false" aria-label="deleteIcon" fontIcon="delete" class="text-gray-500">
                     </mat-icon>
                   </button>
                 </mat-menu>
@@ -49,10 +57,10 @@
                 </div>
                 <div class="h-40 flex justify-center items-center">
                   <img *ngIf="product?.image; else noImage" [src]="'data:image/png;base64,'+product.image"
-                    class="rounded-xs h-full">
+                    class="rounded h-full">
                   <ng-template #noImage>
                     <mat-icon aria-hidden="false" aria-label="no image icon" fontIcon="no_photography"
-                      class="text-gray-500!"></mat-icon>
+                      class="text-gray-500"></mat-icon>
                   </ng-template>
                 </div>
                 <div class="flex flex-col items-center truncate">
@@ -65,7 +73,7 @@
         </ng-container>
         <ng-template #skeleton>
           <div *ngFor="let _ of [].constructor(10); let i = index">
-            <mat-card ngxSkeletonLoader="true" class="m-4 hover:!shadow-xl hover:cursor-pointer h-80">
+            <mat-card ngxSkeletonLoader="true" class="m-4 hover:shadow-xl hover:cursor-pointer h-80">
               <div class="p-5 flex flex-col gap-4 text-center justify-between w-full h-full">
                 <ngx-skeleton-loader [count]="1" appearance="line" width="50px"></ngx-skeleton-loader>
                 <ngx-skeleton-loader [count]="1" appearance="custom-content" height="50px" width="50px">
