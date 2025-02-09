@@ -9,17 +9,17 @@ import { MatInputModule } from '@angular/material/input';
 import { ApiService } from '../../../services/api';
 import { IProductForm } from '../product';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
   providers: [ApiService],
-  imports: [HttpClientModule, MatIconModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatCardModule],
+  imports: [MatIconModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatCardModule],
   templateUrl: './product-form.component.html',
 })
 export class ProductFormComponent {
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private toastr: ToastrService, private api: ApiService, private router: Router) { }
   selectedFile: File | null = null;
 
   productForm = new FormGroup({
@@ -57,7 +57,7 @@ export class ProductFormComponent {
       next: (data: any) => {
         this.navigateBack();
       },
-      error: (err) => console.log('Erro: ', err)
+      error: () => this.toastr.error('Houve algum erro ao cadastrar produto', 'Erro')
     });
   }
 }

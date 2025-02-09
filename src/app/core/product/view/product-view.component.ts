@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-view',
@@ -20,7 +21,7 @@ export class ProductViewComponent implements OnInit {
   id!: string;
   productData!: IProduct;
 
-  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService) {
+  constructor(private toastr: ToastrService, private route: ActivatedRoute, private router: Router, private api: ApiService) {
     this.id = this.route.snapshot.paramMap.get('id')!;
   }
 
@@ -33,7 +34,7 @@ export class ProductViewComponent implements OnInit {
       next: (data: any) => {
         this.productData = data;
       },
-      error: (err) => console.log('Erro: ', err)
+      error: (err) => this.toastr.error('Houve algum erro ao buscar dados do produto', 'Erro')
     });
   }
 

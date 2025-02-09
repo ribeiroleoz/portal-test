@@ -8,7 +8,6 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   get<T>(endpoint: string, filters?: any): Observable<T> {
-    console.log('filter', filters);
     return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params: filters });
   }
 
